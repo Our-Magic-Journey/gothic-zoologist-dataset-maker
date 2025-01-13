@@ -196,6 +196,9 @@ void PlayerControl::onKeyPressed(KeyCodec::Action a, Tempest::KeyEvent::KeyType 
   if(a==Action::K_O && Gothic::inst().isMarvinEnabled())
     marvinO();
 
+  if(a==Action::K_P && Gothic::inst().isMarvinEnabled())
+    marvinP();
+
   ctrl[a] = true;
   }
 
@@ -484,7 +487,31 @@ void PlayerControl::marvinO() {
   auto target = w->player()->target();
 
   w->setPlayer(target);
-  }
+}
+
+void PlayerControl::marvinP() {
+  // auto w = Gothic::inst().world();
+  //
+  // click_count += 1;
+  //
+  // if (click_count > w->npcCount()) {
+  //   click_count = 0;
+  // }
+  //
+  // auto target = w->npcById(click_count);
+  //
+  // if (w == nullptr || target == nullptr)
+  //   return;
+  //
+  // w->setPlayer(target);
+  //
+  // if(auto c = Gothic::inst().camera())
+  //   c->reset();
+  //
+  // auto tex = renderer.screenshoot(cmdId);
+  // auto pm  = device.readPixels(textureCast<const Texture2d&>(tex));
+  // pm.save("dbg.png");
+}
 
 Focus PlayerControl::findFocus(Focus* prev) {
   auto w = Gothic::inst().world();
@@ -555,7 +582,7 @@ bool PlayerControl::tickMove(uint64_t dt) {
   if(ctrl[Action::K_F8] && Gothic::inst().isMarvinEnabled())
     marvinF8(dt);
   if(ctrl[Action::K_K] && Gothic::inst().isMarvinEnabled())
-    marvinK(dt);
+    marvinP();
   cacheFocus = ctrl[Action::ActionGeneric];
   if(camera!=nullptr)
     camera->setLookBack(ctrl[Action::LookBack]);

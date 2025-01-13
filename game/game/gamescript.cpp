@@ -810,7 +810,7 @@ zenkit::DaedalusSymbol* GameScript::findSymbol(const size_t s) {
 size_t GameScript::findSymbolIndex(std::string_view name) {
   auto sym = vm.find_symbol_by_name(name);
   return sym == nullptr ? size_t(-1) : sym->index();
-  }
+}
 
 size_t GameScript::symbolsCount() const {
   return vm.symbols().size();

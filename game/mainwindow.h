@@ -109,6 +109,8 @@ class MainWindow : public Tempest::Window {
       R_Step,
       };
 
+    uint32_t click_count = 1;
+  
     Tempest::Device&      device;
     Tempest::Swapchain    swapchain;
     Tempest::TextureAtlas atlas;

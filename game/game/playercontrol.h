@@ -152,6 +152,8 @@ class PlayerControl final {
     int            rotationAni    = 0;
     bool           g2Ctrl         = false;
 
+    uint32_t            click_count    = 0;
+
     DialogMenu&    dlg;
     InventoryMenu& inv;
 
@@ -160,6 +162,7 @@ class PlayerControl final {
     void           marvinF8(uint64_t dt);
     void           marvinK(uint64_t dt);
     void           marvinO();
+    void           marvinP();
     void           toggleWalkMode();
     void           toggleSneakMode();
     void           moveFocus(FocusAction act);

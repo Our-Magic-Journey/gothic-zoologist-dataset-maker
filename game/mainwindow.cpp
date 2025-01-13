@@ -4,8 +4,6 @@
 #include <Tempest/Painter>
 
 #include <Tempest/Brush>
-#include <Tempest/Pen>
-#include <Tempest/Layout>
 #include <Tempest/Application>
 #include <Tempest/Log>
 
@@ -24,6 +22,7 @@
 
 #include "commandline.h"
 #include "gothic.h"
+#include "game/definitions/cameradefinitions.h"
 
 using namespace Tempest;
 
@@ -499,6 +498,68 @@ void MainWindow::keyUpEvent(KeyEvent &event) {
     if(event.isAccepted())
       return;
     }
+
+  if(event.key==Event::K_K) {
+    auto w = Gothic::inst().world();
+
+    click_count += 1;
+
+    if (click_count > w->npcCount()) {
+      return;
+    }
+
+    auto target = w->npcById(click_count / 10);
+
+    if (!target->isMonster()) {
+      click_count += 1;
+      target = w->npcById(click_count / 10);
+    }
+
+    if (w == nullptr || target == nullptr)
+      return;
+
+    w->setPlayer(target);
+
+    if(auto c = Gothic::inst().camera()) {
+      c->reset();
+      c->setMarvinMode(Camera::M_Free);
+
+      int zoomLevel = -10 - (rand() % 5);
+      for (int i = 0; i < abs(zoomLevel); i++) {
+        c->changeZoom(-1);
+      }
+
+      std::vector<PointF> angles = {
+        {0.0f, 0.0f},  // Front
+        {0.0f, -45.0f}, // Top
+        {90.0f, 0.0f}, // Side
+        {180.0f, 0.0f}  // Back
+      };
+
+      PointF baseAngle;
+
+      if (click_count % 10 <= 4) {
+        size_t viewIndex = click_count % angles.size();
+        baseAngle = angles[viewIndex];
+      } else {
+        baseAngle = {static_cast<float>(rand() % 360), static_cast<float>(rand() % 91 - 45)};
+      }
+
+      float dx = baseAngle.x + static_cast<float>(rand() % 21 - 10);
+      float dy = baseAngle.y + static_cast<float>(rand() % 21 - 10);
+
+      c->setSpin(PointF(dx, dy));
+    }
+
+    auto tex = renderer.screenshoot(cmdId);
+    auto pm  = device.readPixels(textureCast<const Texture2d&>(tex));
+
+    auto folder = "screens/" + std::string(target->displayName()) + "/";
+    auto name = folder + std::to_string(click_count);
+
+    std::filesystem::create_directories(folder);
+    pm.save(name.c_str());
+  }
 
   const char* menuEv=nullptr;
 

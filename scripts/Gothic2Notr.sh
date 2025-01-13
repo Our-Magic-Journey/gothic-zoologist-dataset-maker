@@ -5,5 +5,5 @@ export DYLD_LIBRARY_PATH="$DIR:$DYLD_LIBRARY_PATH"
 if [[ $DEBUGGER != "" ]]; then
   exec $DEBUGGER --args "$DIR/Gothic2Notr" "$@"
 else
-  exec "$DIR/Gothic2Notr" "$@"
+  exec "$DIR/Gothic2Notr" "$@" -devmode -g1 -g "/home/amon/.local/share/Steam/steamapps/common/Gothic"
 fi
